@@ -88,6 +88,7 @@ tasks {
                 "useJakartaEe" to "true",
                 "useTags" to "true",
                 "documentationProvider" to "none",
+                "exceptionHandler" to "false",
             ),
         )
     }
