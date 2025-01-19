@@ -6,6 +6,11 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
+// Fix for Kotlin 2.1.0 errors with ktlint gradle: https://github.com/JLLeitschuh/ktlint-gradle/issues/809
+ktlint {
+    version.set("1.4.1")
+}
+
 group = "io.stocks.inc"
 version = "0.0.1-SNAPSHOT"
 
