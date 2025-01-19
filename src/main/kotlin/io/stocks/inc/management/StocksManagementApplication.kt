@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class StocksManagementCassandraApplication
+class StocksManagementApplication
 
 fun main(args: Array<String>) {
-    runApplication<StocksManagementCassandraApplication>(*args)
+    runApplication<StocksManagementApplication>(*args)
 }

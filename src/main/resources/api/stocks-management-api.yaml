@@ -1,0 +1,237 @@
+openapi: 3.0.3
+info:
+  title: 'Stocks management API'
+  version: '1.0.0'
+  description: |-
+    API for a simple stocks management application.
+externalDocs:
+  description: 'Stocks management project source code on GitHub'
+  url: https://github.com/Ballr0g/stocks-management-cassandra
+paths:
+  /api/v1/stock/quote:
+    post:
+      tags:
+        - stock-quote
+      summary: 'Creates a new quote for a stock'
+      description: 'Create a new bid-ask spread pair for a stock with specific isin'
+      operationId: createStockQuoteEntry
+      requestBody:
+        required: true
+        description: 'Request body containing new bid-ask pair for a stock'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostQuoteRequestDto'
+      responses:
+        '201':
+          $ref: '#/components/responses/createStockQuoteEntrySuccessResponse'
+        '400':
+          $ref: '#/components/responses/createStockQuoteEntryInvalidFormatResponse'
+        '500':
+          $ref: '#/components/responses/createStockQuoteEntryInternalErrorResponse'
+  /api/v1/stock/quote/{isin}:
+    get:
+      tags:
+        - stock-quote
+      summary: 'Gets current data about a quote by isin'
+      description: 'Retrieve current state of a stock (bid-ask spread) by an isin'
+      operationId: getQuoteEntryByIsin
+      parameters:
+        - $ref: '#/components/parameters/isin'
+      responses:
+        '200':
+          $ref: '#/components/responses/getQuoteEntryByIsinSuccessResponse'
+        '404':
+          $ref: '#/components/responses/getQuoteNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/getQuoteInternalErrorResponse'
+components:
+  schemas:
+    # --> Request models <--
+    PostQuoteRequestDto:
+      type: object
+      description: '[Request] Data containing all the necessary info to create a quote for a stock.'
+      required:
+        - isin
+        - bid
+        - ask
+      properties:
+        isin:
+          allOf:
+            - $ref: '#/components/schemas/isin'
+        bid:
+          allOf:
+            - $ref: '#/components/schemas/bid'
+        ask:
+          allOf:
+            - $ref: '#/components/schemas/ask'
+
+    # --> Response models <--
+    PostQuoteCreatedResponseDto:
+      type: object
+      description: '[Response] Successful stock creation result containing isin and current energy level.'
+      required:
+        - isin
+        - elvl
+      properties:
+        isin:
+          allOf:
+            - $ref: '#/components/schemas/isin'
+        elvl:
+          allOf:
+            - $ref: '#/components/schemas/elvl'
+    PostQuoteInvalidFormatResponseDto:
+      type: object
+      description: '[Response] Invalid format of input parameters provided by client'
+      required:
+        - validationErrors
+      properties:
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyValidationError'
+
+    GetQuoteEntryByIsinResponseDto:
+      type: object
+      description: '[Response] Information about a stock with a given isin'
+      required:
+        - isin
+        - bid
+        - ask
+        - elvl
+      properties:
+        isin:
+          allOf:
+            - $ref: '#/components/schemas/isin'
+        bid:
+          allOf:
+            - $ref: '#/components/schemas/bid'
+        ask:
+          allOf:
+            - $ref: '#/components/schemas/ask'
+        elvl:
+          allOf:
+            - $ref: '#/components/schemas/elvl'
+
+    NotFoundCommonResponseDto:
+      type: object
+      description: '[Response] A general-purpose not found error'
+      required:
+        - failedEndpoint
+        - missingIdName
+      properties:
+        failedMethod:
+          description: 'Name of the endpoint that returned 404'
+          type: string
+        missingIdName:
+          description: 'Name of the property that caused the error'
+          type: string
+
+    InternalErrorCommonResponseDto:
+      type: object
+      description: '[Response] A general-purpose error response for unexpected behavior of the system'
+      required:
+        - failedEndpoint
+        - cause
+      properties:
+        failedMethod:
+          description: 'Name of the endpoint that returned an unexpected error'
+          type: string
+        cause:
+          description: 'Why the failure occurred'
+          type: string
+
+    # --> Parameter models <--
+    isin:
+      description: 'Unique identifier of a quote'
+      type: string
+      minLength: 12
+      maxLength: 12
+      example: 'RU000A0JX0J2'
+    bid:
+      description: 'For how much will an investor buy a stock'
+      type: number
+      format: double
+      example: 100.2
+    ask:
+      description: 'For how much will an investor sell a stock'
+      type: number
+      format: double
+      example: 101.9
+    elvl:
+      description: 'Current energy level of a financial instrument - the best current price available'
+      type: number
+      format: double
+      example: 100.5
+
+    PropertyValidationError:
+      description: 'An error representing a single property with a validation error'
+      required:
+        - propertyName
+        - actualValue
+        - expectedFormat
+      properties:
+        propertyName:
+          description: 'Name of a property with a failed validation'
+          type: string
+          minLength: 1
+        actualValue:
+          description: 'Actual value of the property provided'
+          type: string
+        expectedFormat:
+          description: 'Cause of the validation failure, optionally - a valid example'
+          type: string
+          minLength: 1
+
+  # --> Request parameters <--
+  parameters:
+    isin:
+      name: isin
+      in: path
+      required: true
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/isin'
+      example: 'RU000A0JX0J2'
+
+  # --> Responses <--
+  responses:
+    # --> POST /api/v1/stock/quote responses <--
+    createStockQuoteEntrySuccessResponse:
+      description: 'Successful response for a new quote request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostQuoteCreatedResponseDto'
+    createStockQuoteEntryInvalidFormatResponse:
+      description: '400 response for a new quote request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostQuoteInvalidFormatResponseDto'
+    createStockQuoteEntryInternalErrorResponse:
+      description: '500 response for a new quote request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorCommonResponseDto'
+
+    # --> GET /api/v1/stock/quote/{isin} responses <--
+    getQuoteEntryByIsinSuccessResponse:
+      description: 'Successful response for retrieving a quote by isin'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetQuoteEntryByIsinResponseDto'
+    getQuoteNotFoundResponse:
+      description: '404 response for retrieving a quote by isin - no stocks for given isin exist'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundCommonResponseDto'
+    getQuoteInternalErrorResponse:
+      description: '500 response for a quote retrieval request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorCommonResponseDto'
