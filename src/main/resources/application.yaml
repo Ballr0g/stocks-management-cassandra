@@ -1,2 +1,20 @@
+logging:
+  level:
+    org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter: DEBUG
+
+server:
+  shutdown: graceful
+
 spring:
-  application.name: 'stocks-management-cassandra'
+  application:
+    name: 'stocks-management-cassandra'
+  profiles:
+    active:
+      - ${SPRING_PROFILE_NAME:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: 4m
+  main:
+    banner-mode: off
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
