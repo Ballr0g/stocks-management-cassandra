@@ -9,22 +9,21 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-fun PostQuoteRequestDto.toModel(
+fun PostQuoteRequestDto.toModelWithPeriodIdProvider(
     periodIdProvider: PeriodIdProvider =
         PeriodIdProvider {
             val currentTimeUtc = LocalDate.now(ZoneId.of("UTC"))
             "${currentTimeUtc.dayOfYear}-${currentTimeUtc.monthValue}-${currentTimeUtc.year}"
         },
-): StockQuoteRequest =
-    StockQuoteRequest(
-        isin = this.isin,
-        periodId = periodIdProvider.currentPeriodId(),
-        bid = bid,
-        ask = ask,
-        quoteTime = LocalDateTime.now(ZoneId.of("UTC")),
-    )
+) = StockQuoteRequest(
+    isin = this.isin,
+    periodId = periodIdProvider.currentPeriodId(),
+    bid = bid,
+    ask = ask,
+    quoteTime = LocalDateTime.now(ZoneId.of("UTC")),
+)
 
-fun StockQuoteEntry.toDto(): PostQuoteCreatedResponseDto =
+fun StockQuoteEntry.toDto() =
     PostQuoteCreatedResponseDto(
         isin = this.isin,
         elvl = energyLevel,
