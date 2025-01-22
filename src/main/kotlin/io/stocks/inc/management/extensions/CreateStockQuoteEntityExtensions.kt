@@ -21,3 +21,14 @@ fun StockQuoteEnergyLevel.toEntity() =
         energyLevel = this.energyLevel,
         quoteTime = this.quoteTime,
     )
+
+fun StockQuoteEnergyLevelEntity?.toModel() =
+    if (this == null) {
+        null
+    } else {
+        StockQuoteEnergyLevel(
+            isin = this.isin,
+            energyLevel = this.energyLevel,
+            quoteTime = this.quoteTime,
+        )
+    }
