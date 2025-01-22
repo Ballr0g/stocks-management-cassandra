@@ -19,7 +19,12 @@ class StockQuoteCreationBatchSaver(
         val stockQuoteSavedEntity = stockQuoteRequest.toEntityWithEnergyLevel(stockQuoteEnergyLevel)
         val stockQuoteSavedEnergyLevelEntity = stockQuoteEnergyLevel.toEntity()
 
-        stockQuoteCreationScenarioRepository.batchSaveQuoteWithEnergyLevel(stockQuoteSavedEntity, stockQuoteSavedEnergyLevelEntity)
+        val batchWriteResult =
+            stockQuoteCreationScenarioRepository.batchSaveQuoteWithEnergyLevel(
+                stockQuoteSavedEntity,
+                stockQuoteSavedEnergyLevelEntity,
+            )
+        check (batchWriteResult.wasApplied()) { "Cassandra batch save failure" }
 
         return StockQuoteEntry(
             isin = stockQuoteSavedEntity.isin,

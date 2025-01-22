@@ -1,5 +1,6 @@
 package io.stocks.inc.management.service
 
+import io.stocks.inc.management.extensions.toModel
 import io.stocks.inc.management.model.StockQuoteEnergyLevel
 import io.stocks.inc.management.model.StockQuoteRequest
 import io.stocks.inc.management.persistence.repository.StockQuoteCreationScenarioRepository
@@ -10,12 +11,15 @@ class StockEnergyLevelRetriever(
     private val stockQuoteCreationScenarioRepository: StockQuoteCreationScenarioRepository,
 ) {
     fun calculateNewEnergyLevelForStockQuoteRequest(stockQuoteRequest: StockQuoteRequest): StockQuoteEnergyLevel {
-        val previousEnergyLevelQuote =
+        val previousEnergyLevelQuoteEntity =
             stockQuoteCreationScenarioRepository.selectEnergyLevelByIsin(stockQuoteRequest.isin)
+
+        val previousEnergyLevelModel =
+            previousEnergyLevelQuoteEntity.toModel()
                 ?: return inferEnergyLevelForNewStockByRequest(stockQuoteRequest)
 
-        val previousEnergyLevel = previousEnergyLevelQuote.energyLevel
-        return previousEnergyLevelQuote.copy(
+        val previousEnergyLevel = previousEnergyLevelModel.energyLevel
+        return previousEnergyLevelModel.copy(
             energyLevel =
                 when {
                     stockQuoteRequest.bid > previousEnergyLevel -> stockQuoteRequest.bid
