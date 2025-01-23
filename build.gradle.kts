@@ -7,6 +7,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.openapi.generator") version "7.10.0"
+    `java-test-fixtures`
 }
 
 group = "io.stocks.inc"
@@ -17,6 +18,7 @@ val rootPackageName = "io.stocks.inc.management"
 
 val swaggerAnnotationsVersion: String by project
 val hibernateValidatorVersion: String by project
+val assertJVersion: String by project
 
 ktlint {
     // Fix for Kotlin 2.1.0 errors with ktlint gradle: https://github.com/JLLeitschuh/ktlint-gradle/issues/809
@@ -50,6 +52,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
