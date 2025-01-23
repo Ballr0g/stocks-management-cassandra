@@ -7,6 +7,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.openapi.generator") version "7.10.0"
+    `java-test-fixtures`
 }
 
 group = "io.stocks.inc"
@@ -14,7 +15,11 @@ version = "0.0.1-SNAPSHOT"
 
 val openApiGeneratingDirQuote = "generated/openapi"
 val rootPackageName = "io.stocks.inc.management"
+
 val swaggerAnnotationsVersion: String by project
+val hibernateValidatorVersion: String by project
+val assertJVersion: String by project
+val mockitoVersion: String by project
 
 ktlint {
     // Fix for Kotlin 2.1.0 errors with ktlint gradle: https://github.com/JLLeitschuh/ktlint-gradle/issues/809
@@ -42,9 +47,19 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("jakarta.validation:jakarta.validation-api")
     implementation("io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion")
+
+    // Hibernate validator
+    implementation("org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoVersion")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // --> Development-Only Dependencies <--
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 }
 
 kotlin {
@@ -88,6 +103,7 @@ tasks {
                 "useJakartaEe" to "true",
                 "useTags" to "true",
                 "documentationProvider" to "none",
+                "exceptionHandler" to "false",
             ),
         )
     }

@@ -18,3 +18,11 @@ spring:
   mvc:
     converters:
       preferred-json-mapper: jackson
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yaml
+  cassandra:
+    contact-points: ${CASSANDRA_HOSTS:[localhost]}
+    keyspace-name: stocks
+    local-datacenter: quotes-datacenter-1

@@ -1,0 +1,31 @@
+services:
+  cassandra:
+    image: cassandra:5.0.2
+    container_name: cassandra
+    ports:
+      - "7001:7000"
+      - "9042:9042"
+    networks:
+      - cassandra-network
+    environment:
+      - CASSANDRA_CLUSTER_NAME=quotes-cluster
+      - CASSANDRA_DC=quotes-datacenter-1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - HEAP_NEWSIZE=100M
+      - MAX_HEAP_SIZE=512M
+    volumes:
+      - cassandra-node:/var/lib/cassandra
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "nodetool status" ]
+      interval: 2m
+      start_period: 2m
+      timeout: 10s
+      retries: 3
+
+networks:
+  cassandra-network:
+    driver: bridge
+
+volumes:
+  cassandra-node:
