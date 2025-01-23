@@ -24,7 +24,7 @@ class StockQuoteCreationBatchSaver(
                 stockQuoteSavedEntity,
                 stockQuoteSavedEnergyLevelEntity,
             )
-        check (batchWriteResult.wasApplied()) { "Cassandra batch save failure" }
+        check(batchWriteResult.wasApplied()) { "Cassandra batch save failure" }
 
         return StockQuoteEntry(
             isin = stockQuoteSavedEntity.isin,
