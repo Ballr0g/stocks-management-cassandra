@@ -30,6 +30,7 @@ class StockQuoteCreationBatchSaver(
             isin = stockQuoteSavedEntity.isin,
             bid = stockQuoteSavedEntity.bid,
             ask = stockQuoteSavedEntity.ask,
+            quoteTime = stockQuoteSavedEntity.quoteTime,
             energyLevel = stockQuoteSavedEnergyLevelEntity.energyLevel,
         )
     }

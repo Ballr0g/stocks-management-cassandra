@@ -2,9 +2,11 @@ package io.stocks.inc.management.model
 
 import io.stocks.inc.management.exception.IllegalStockQuoteEntryArgumentException
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 data class StockQuoteEntry(
     val isin: String,
+    val quoteTime: LocalDateTime,
     val bid: BigDecimal?,
     val ask: BigDecimal?,
     val energyLevel: BigDecimal,
