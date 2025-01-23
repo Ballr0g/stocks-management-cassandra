@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Stocks management API'
-  version: '1.0.1'
+  version: '1.0.2'
   description: |-
     API for a simple stocks management application.
 externalDocs:
@@ -177,7 +177,7 @@ components:
           minLength: 1
         actualValue:
           description: 'Actual value of the property provided'
-          type: string
+          type: object
         expectedFormat:
           description: 'Cause of the validation failure, optionally - a valid example'
           type: string

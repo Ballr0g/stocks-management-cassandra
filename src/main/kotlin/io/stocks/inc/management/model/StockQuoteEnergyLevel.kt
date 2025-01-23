@@ -1,5 +1,6 @@
 package io.stocks.inc.management.model
 
+import io.stocks.inc.management.exception.IllegalStockQuoteEnergyLevelArgumentException
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -9,6 +10,11 @@ data class StockQuoteEnergyLevel(
     val quoteTime: LocalDateTime,
 ) {
     init {
-        require(isin.length == 12) { "isin must be 12 chars, got: $isin (${isin.length} chars)" }
+        if (isin.length != 12) {
+            throw IllegalStockQuoteEnergyLevelArgumentException(
+                actualValue = isin,
+                message = "isin must be 12 chars, got: $isin (${isin.length} chars)",
+            )
+        }
     }
 }
