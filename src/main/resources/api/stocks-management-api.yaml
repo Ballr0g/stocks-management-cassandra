@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Stocks management API'
-  version: '1.0.0'
+  version: '1.0.1'
   description: |-
     API for a simple stocks management application.
 externalDocs:
@@ -53,8 +53,6 @@ components:
       description: '[Request] Data containing all the necessary info to create a quote for a stock.'
       required:
         - isin
-        - bid
-        - ask
       properties:
         isin:
           allOf:
@@ -152,11 +150,13 @@ components:
       description: 'For how much will an investor buy a stock'
       type: number
       format: double
+      nullable: true
       example: 100.2
     ask:
       description: 'For how much will an investor sell a stock'
       type: number
       format: double
+      nullable: true
       example: 101.9
     elvl:
       description: 'Current energy level of a financial instrument - the best current price available'

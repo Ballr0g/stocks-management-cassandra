@@ -6,7 +6,7 @@ import org.springframework.data.cassandra.core.mapping.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-@Table(keyspace = "stocks", value = "energy_level_by_isin")
+@Table("energy_level_by_isin")
 data class StockQuoteEnergyLevelEntity(
     @field:PrimaryKey val isin: String,
     @field:Column("energy_level") val energyLevel: BigDecimal,

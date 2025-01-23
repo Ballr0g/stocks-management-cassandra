@@ -8,7 +8,7 @@ import org.springframework.data.cassandra.core.mapping.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-@Table(keyspace = "stocks", value = "quotes_by_isin_and_date")
+@Table("quotes_by_isin_and_date")
 data class StockQuoteByIsinAndDateEntity(
     @field:PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 0) val isin: String,
     @field:PrimaryKeyColumn(
@@ -22,7 +22,7 @@ data class StockQuoteByIsinAndDateEntity(
         ordinal = 2,
         ordering = Ordering.DESCENDING,
     ) val quoteTime: LocalDateTime,
-    @field:PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 3) val bid: BigDecimal,
-    @field:PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 4) val ask: BigDecimal,
+    val bid: BigDecimal?,
+    val ask: BigDecimal?,
     @field:Column("energy_level") val energyLevel: BigDecimal,
 )

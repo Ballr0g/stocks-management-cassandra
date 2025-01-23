@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS stocks.quotes_by_isin_and_date(
     bid             DECIMAL,
     ask             DECIMAL,
     energy_level    DECIMAL,
-    PRIMARY KEY ((isin, period_id), quote_time, bid, ask)
+    PRIMARY KEY ((isin, period_id), quote_time)
 ) WITH CLUSTERING ORDER BY (quote_time DESC);

@@ -22,6 +22,7 @@ class StockEnergyLevelRetriever(
         return previousEnergyLevelModel.copy(
             energyLevel =
                 when {
+                    stockQuoteRequest.bid == null || stockQuoteRequest.ask == null -> stockQuoteRequest.bidOrAskIfNull
                     stockQuoteRequest.bid > previousEnergyLevel -> stockQuoteRequest.bid
                     stockQuoteRequest.ask < previousEnergyLevel -> stockQuoteRequest.ask
                     else -> previousEnergyLevel
@@ -32,7 +33,7 @@ class StockEnergyLevelRetriever(
     private fun inferEnergyLevelForNewStockByRequest(stockQuoteRequest: StockQuoteRequest) =
         StockQuoteEnergyLevel(
             isin = stockQuoteRequest.isin,
-            energyLevel = stockQuoteRequest.bid,
+            energyLevel = stockQuoteRequest.bidOrAskIfNull,
             quoteTime = stockQuoteRequest.quoteTime,
         )
 }
