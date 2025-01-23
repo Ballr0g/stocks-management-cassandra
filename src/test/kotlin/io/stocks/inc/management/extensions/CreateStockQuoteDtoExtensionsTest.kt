@@ -18,7 +18,7 @@ class CreateStockQuoteDtoExtensionsTest {
     fun `when PostQuoteRequestDto mapped to StockQuoteRequest properties transferred`() {
         // given
         val testLocalDate = LocalDate.of(2025, Month.JANUARY, 20)
-        val expectedPeriodId: String = testLocalDate.format(DefaultFormatters.DEFAULT_PERIOD_ID_FORMATTER)
+        val expectedPeriodId: String = testLocalDate.format(DEFAULT_PERIOD_ID_FORMATTER)
 
         // when
         val actualMappedStockQuoteRequest =
