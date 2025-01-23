@@ -5,6 +5,7 @@ import io.stocks.inc.management.model.StockQuoteEnergyLevelFixtures
 import io.stocks.inc.management.model.StockQuoteRequestFixtures
 import io.stocks.inc.management.model.entity.PostQuoteEntityFixtures
 import io.stocks.inc.management.persistence.repository.StockQuoteCreationScenarioRepository
+import io.stocks.inc.management.service.quote.creation.StockEnergyLevelRetriever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

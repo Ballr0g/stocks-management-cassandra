@@ -8,7 +8,7 @@ import io.stocks.inc.management.generated.model.InternalErrorCommonResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteCreatedResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteInvalidFormatResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteRequestDto
-import io.stocks.inc.management.service.StockCreationRequestService
+import io.stocks.inc.management.service.quote.creation.StockCreationRequestService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
