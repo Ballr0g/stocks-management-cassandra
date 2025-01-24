@@ -47,7 +47,7 @@ class StockQuoteController(
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 InternalErrorCommonResponseDto(
-                    e.message ?: "Unidentified error",
+                    e.message ?: "Unidentified error on ${request.method} ${request.requestURL}",
                     "${request.method} ${request.requestURI})",
                 ),
             )
