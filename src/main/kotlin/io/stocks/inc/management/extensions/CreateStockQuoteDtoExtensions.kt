@@ -2,8 +2,8 @@ package io.stocks.inc.management.extensions
 
 import io.stocks.inc.management.exception.IllegalPropertyArgumentException
 import io.stocks.inc.management.extensions.DefaultFormatters.DEFAULT_PERIOD_ID_FORMATTER
+import io.stocks.inc.management.generated.model.InvalidFormatCommonResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteCreatedResponseDto
-import io.stocks.inc.management.generated.model.PostQuoteInvalidFormatResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteRequestDto
 import io.stocks.inc.management.generated.model.PropertyValidationError
 import io.stocks.inc.management.model.PeriodIdProvider
@@ -39,7 +39,7 @@ fun StockQuoteEntry.toDto() =
     )
 
 fun IllegalPropertyArgumentException.toPostQuoteInvalidFormatResponseDto() =
-    PostQuoteInvalidFormatResponseDto(
+    InvalidFormatCommonResponseDto(
         listOf(
             PropertyValidationError(
                 propertyName = propertyName,

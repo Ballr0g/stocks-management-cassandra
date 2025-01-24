@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: 'Stocks management API'
-  version: '1.0.2'
+  version: '1.1.0'
   description: |-
     API for a simple stocks management application.
 externalDocs:
@@ -45,6 +45,24 @@ paths:
           $ref: '#/components/responses/getQuoteNotFoundResponse'
         '500':
           $ref: '#/components/responses/getQuoteInternalErrorResponse'
+  /api/v1/stock/elvl/{isin}:
+    get:
+      tags:
+        - stock-quote-elvl
+      summary: 'Gets elvl value by stock isin'
+      description: 'Retrieve the best price (energy level) of a stock by given isin'
+      operationId: getQuoteEnergyLevelByIsin
+      parameters:
+        - $ref: '#/components/parameters/isin'
+      responses:
+        '200':
+          $ref: '#/components/responses/getQuoteEnergyLevelByIsinSuccessResponse'
+        '400':
+          $ref: '#/components/responses/getQuoteEnergyLevelInvalidFormatResponse'
+        '404':
+          $ref: '#/components/responses/getQuoteEnergyLevelNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/getQuoteEnergyLevelInternalErrorResponse'
 components:
   schemas:
     # --> Request models <--
@@ -78,16 +96,6 @@ components:
         elvl:
           allOf:
             - $ref: '#/components/schemas/elvl'
-    PostQuoteInvalidFormatResponseDto:
-      type: object
-      description: '[Response] Invalid format of input parameters provided by client'
-      required:
-        - validationErrors
-      properties:
-        validationErrors:
-          type: array
-          items:
-            $ref: '#/components/schemas/PropertyValidationError'
 
     GetQuoteEntryByIsinResponseDto:
       type: object
@@ -110,6 +118,35 @@ components:
         elvl:
           allOf:
             - $ref: '#/components/schemas/elvl'
+
+    GetEnergyLevelByIsinResponseDto:
+      type: object
+      description: '[Response] Info about the latest available energy level of a stock'
+      required:
+        - isin
+        - elvl
+        - quoteTime
+      properties:
+        isin:
+          allOf:
+            - $ref: '#/components/schemas/isin'
+        elvl:
+          allOf:
+            - $ref: '#/components/schemas/elvl'
+        quoteTime:
+          allOf:
+            - $ref: '#/components/schemas/quoteTime'
+
+    InvalidFormatCommonResponseDto:
+      type: object
+      description: '[Response] Invalid format of input parameters provided by client'
+      required:
+        - validationErrors
+      properties:
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyValidationError'
 
     NotFoundCommonResponseDto:
       type: object
@@ -163,6 +200,10 @@ components:
       type: number
       format: double
       example: 100.5
+    quoteTime:
+      description: 'Time of the latest update of a stock quote'
+      type: string
+      format: date-time
 
     PropertyValidationError:
       description: 'An error representing a single property with a validation error'
@@ -208,7 +249,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PostQuoteInvalidFormatResponseDto'
+            $ref: '#/components/schemas/InvalidFormatCommonResponseDto'
     createStockQuoteEntryInternalErrorResponse:
       description: '500 response for a new quote request'
       content:
@@ -231,6 +272,32 @@ components:
             $ref: '#/components/schemas/NotFoundCommonResponseDto'
     getQuoteInternalErrorResponse:
       description: '500 response for a quote retrieval request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorCommonResponseDto'
+
+    # --> GET /api/v1/stock/elvl/{isin} <--
+    getQuoteEnergyLevelByIsinSuccessResponse:
+      description: 'Successful response for retrieving an energy level by isin'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetEnergyLevelByIsinResponseDto'
+    getQuoteEnergyLevelInvalidFormatResponse:
+      description: '400 response for GET energy level request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvalidFormatCommonResponseDto'
+    getQuoteEnergyLevelNotFoundResponse:
+      description: '404 response for retrieving an energy level by isin - no energy levels available for given stock'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundCommonResponseDto'
+    getQuoteEnergyLevelInternalErrorResponse:
+      description: '500 response for an energy level retrieval request'
       content:
         application/json:
           schema:
