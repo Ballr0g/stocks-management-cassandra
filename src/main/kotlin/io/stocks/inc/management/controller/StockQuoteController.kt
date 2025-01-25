@@ -5,10 +5,10 @@ import io.stocks.inc.management.extensions.toPostQuoteInvalidFormatResponseDto
 import io.stocks.inc.management.generated.api.StockQuoteApi
 import io.stocks.inc.management.generated.model.GetQuoteEntryByIsinResponseDto
 import io.stocks.inc.management.generated.model.InternalErrorCommonResponseDto
+import io.stocks.inc.management.generated.model.InvalidFormatCommonResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteCreatedResponseDto
-import io.stocks.inc.management.generated.model.PostQuoteInvalidFormatResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteRequestDto
-import io.stocks.inc.management.service.StockCreationRequestService
+import io.stocks.inc.management.service.quote.creation.StockCreationRequestService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -33,7 +33,7 @@ class StockQuoteController(
     @ExceptionHandler(IllegalPropertyArgumentException::class)
     private fun handleIllegalPropertyArgumentException(
         e: IllegalPropertyArgumentException,
-    ): ResponseEntity<PostQuoteInvalidFormatResponseDto> =
+    ): ResponseEntity<InvalidFormatCommonResponseDto> =
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(e.toPostQuoteInvalidFormatResponseDto())
@@ -47,7 +47,7 @@ class StockQuoteController(
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 InternalErrorCommonResponseDto(
-                    e.message ?: "Unidentified error",
+                    e.message ?: "Unidentified error on ${request.method} ${request.requestURL}",
                     "${request.method} ${request.requestURI})",
                 ),
             )

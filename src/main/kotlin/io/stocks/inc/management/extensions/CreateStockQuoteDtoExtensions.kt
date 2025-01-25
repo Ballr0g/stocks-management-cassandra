@@ -2,16 +2,18 @@ package io.stocks.inc.management.extensions
 
 import io.stocks.inc.management.exception.IllegalPropertyArgumentException
 import io.stocks.inc.management.extensions.DefaultFormatters.DEFAULT_PERIOD_ID_FORMATTER
+import io.stocks.inc.management.generated.model.GetEnergyLevelByIsinResponseDto
+import io.stocks.inc.management.generated.model.InvalidFormatCommonResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteCreatedResponseDto
-import io.stocks.inc.management.generated.model.PostQuoteInvalidFormatResponseDto
 import io.stocks.inc.management.generated.model.PostQuoteRequestDto
 import io.stocks.inc.management.generated.model.PropertyValidationError
 import io.stocks.inc.management.model.PeriodIdProvider
+import io.stocks.inc.management.model.StockQuoteEnergyLevel
 import io.stocks.inc.management.model.StockQuoteEntry
 import io.stocks.inc.management.model.StockQuoteRequest
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 object DefaultFormatters {
@@ -21,7 +23,7 @@ object DefaultFormatters {
 fun PostQuoteRequestDto.toModelWithPeriodIdProvider(
     periodIdProvider: PeriodIdProvider =
         PeriodIdProvider {
-            val currentTimeUtc = LocalDate.now(ZoneId.of("UTC"))
+            val currentTimeUtc = LocalDate.now(ZoneOffset.UTC)
             currentTimeUtc.format(DEFAULT_PERIOD_ID_FORMATTER)
         },
 ) = StockQuoteRequest(
@@ -29,7 +31,7 @@ fun PostQuoteRequestDto.toModelWithPeriodIdProvider(
     periodId = periodIdProvider.currentPeriodId(),
     bid = bid,
     ask = ask,
-    quoteTime = LocalDateTime.now(ZoneId.of("UTC")),
+    quoteTime = LocalDateTime.now(ZoneOffset.UTC),
 )
 
 fun StockQuoteEntry.toDto() =
@@ -38,8 +40,15 @@ fun StockQuoteEntry.toDto() =
         elvl = energyLevel,
     )
 
+fun StockQuoteEnergyLevel.toDto() =
+    GetEnergyLevelByIsinResponseDto(
+        isin = isin,
+        elvl = energyLevel,
+        quoteTime = quoteTime.atOffset(ZoneOffset.UTC),
+    )
+
 fun IllegalPropertyArgumentException.toPostQuoteInvalidFormatResponseDto() =
-    PostQuoteInvalidFormatResponseDto(
+    InvalidFormatCommonResponseDto(
         listOf(
             PropertyValidationError(
                 propertyName = propertyName,

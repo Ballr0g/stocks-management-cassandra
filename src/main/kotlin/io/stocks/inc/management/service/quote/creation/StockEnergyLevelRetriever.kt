@@ -1,4 +1,4 @@
-package io.stocks.inc.management.service
+package io.stocks.inc.management.service.quote.creation
 
 import io.stocks.inc.management.extensions.toModel
 import io.stocks.inc.management.model.StockQuoteEnergyLevel
