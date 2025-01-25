@@ -1,11 +1,10 @@
-package io.stocks.inc.management.service
+package io.stocks.inc.management.service.quote.creation
 
 import io.stocks.inc.management.model.PrimitiveStockQuoteFixtures
 import io.stocks.inc.management.model.StockQuoteEnergyLevelFixtures
 import io.stocks.inc.management.model.StockQuoteRequestFixtures
 import io.stocks.inc.management.model.entity.PostQuoteEntityFixtures
 import io.stocks.inc.management.persistence.repository.StockQuoteCreationScenarioRepository
-import io.stocks.inc.management.service.quote.creation.StockEnergyLevelRetriever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,10 +18,10 @@ import java.math.BigDecimal
 @ExtendWith(MockitoExtension::class)
 class StockEnergyLevelRetrieverTest {
     @Mock
-    lateinit var stockQuoteCreationScenarioRepository: StockQuoteCreationScenarioRepository
+    private lateinit var stockQuoteCreationScenarioRepository: StockQuoteCreationScenarioRepository
 
     @InjectMocks
-    lateinit var stockEnergyLevelRetriever: StockEnergyLevelRetriever
+    private lateinit var stockEnergyLevelRetriever: StockEnergyLevelRetriever
 
     @Test
     fun `when no previous energy level present should return a new entry with bid as energy level`() {
